@@ -1,0 +1,7 @@
+Dependencies
+-------------
+Python > 2.6	http://www.python.org/
+libpcap		http://www.tcpdump.org/#latest 
+pypcap		http://code.google.com/p/pypcap/
+dpkt		http://code.google.com/p/dpkt/
+netifaces	http://alastairs-place.net/netifaces/
