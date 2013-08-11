@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 ##########################################################################
-# Copyright (C) Chatzopoulos Dimos 2010 <dimosch@linuxteam.cs.teilar.gr> #
+# Copyright (C) Chatzopoulos Dimos 2010 <dimosch@gmail.com> 		 #
 #                                                                        #
 # This program is free software: you can redistribute it and/or modify   #
 # it under the terms of the GNU General Public License as published by   #
