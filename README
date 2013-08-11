@@ -1,3 +1,8 @@
+Python-snifer
+==============================
+A small network packet sniffer written in python, with some ARP spoofing capabilities.
+
+
 Dependencies
 -------------
 Python > 2.6	http://www.python.org/
