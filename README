@@ -1,5 +1,5 @@
 Python-snifer
-==============================
+=============
 A small network packet sniffer written in python, with some ARP spoofing capabilities.
 
 
@@ -10,3 +10,7 @@ libpcap		http://www.tcpdump.org/#latest
 pypcap		http://code.google.com/p/pypcap/
 dpkt		http://code.google.com/p/dpkt/
 netifaces	http://alastairs-place.net/netifaces/
+
+Ubuntu installation
+-------------
+sudo apt-get install python-pypcap python-dpkt python-netifaces
