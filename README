@@ -11,6 +11,6 @@ pypcap		http://code.google.com/p/pypcap/
 dpkt		http://code.google.com/p/dpkt/
 netifaces	http://alastairs-place.net/netifaces/
 
-Ubuntu installation
+Ubuntu dependencies installation
 -------------
 sudo apt-get install python-pypcap python-dpkt python-netifaces
