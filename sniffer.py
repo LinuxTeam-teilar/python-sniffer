@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 ##########################################################################
-# Copyright (C) Chatzopoulos Dimos 2010 <dimosch@gmail.com> 		 #
+# Copyright (C) Chatzopoulos Dimos 2010 <dimosch@gmail.com>              #
 #                                                                        #
 # This program is free software: you can redistribute it and/or modify   #
 # it under the terms of the GNU General Public License as published by   #
-# the Free Software Foundation, either version 3 of the License, or      #      
+# the Free Software Foundation, either version 3 of the License, or      #
 # (at your option) any later version.                                    #
 #                                                                        #
 # This program is distributed in the hope that it will be useful,        #
@@ -36,61 +36,53 @@ p.add_option('-p', '--promisc', action='store_true', dest='promisc', default=Fal
 options, arguments = p.parse_args() # get options and arguments
 
 if options.interface:
-	try:
-        	pc = pcap.pcap(name = options.interface, snaplen = options.snaplen, promisc = options.promisc)
-		pc.setfilter(options.filter)
-	except OSError, e:
-        	print e
-        	sys.exit(0)
-	pc.setnonblock(True)
-	if options.hexdump and options.dumpfile: # make sure that -w and -x options are not going to be used together
-		print 'Options -w and -x may not be used together\n'
-		p.print_help()	
-	else:
-		try:
-			if options.targets: # if -m: run the attack in a separate process
-                		target1, target2 = options.targets #get the targets from -m dest tuple
-                 	        if functs.checkIp(target1)==True and functs.checkIp(target2)==True: # check for valid targets (functs.checkIp)
-					mitm=Process(target=attacks.mitm, args=(target1, target2, options.interface))
-        	                	mitm.start()
-                	        	mitm.join(6) # get the stdout for 6 secs
-					if mitm.is_alive():pass #check if the mitm process exited
-					else:sys.exit(0)
-				else:
-					print 'Targets are not valid IP addresses'
-					sys.exit(0)
-		
-			print 'Listening on %s:\n' % options.interface
+    try:
+        pc = pcap.pcap(name = options.interface, snaplen = options.snaplen, promisc = options.promisc)
+        pc.setfilter(options.filter)
+    except OSError, e:
+        print e
+        sys.exit(0)
+    pc.setnonblock(True)
+    if options.hexdump and options.dumpfile: # make sure that -w and -x options are not going to be used together
+        print 'Options -w and -x may not be used together\n'
+        p.print_help()
+    else:
+        try:
+            if options.targets: # if -m: run the attack in a separate process
+                target1, target2 = options.targets #get the targets from -m dest tuple
+                if functs.checkIp(target1)==True and functs.checkIp(target2)==True: # check for valid targets (functs.checkIp)
+                    mitm=Process(target=attacks.mitm, args=(target1, target2, options.interface))
+                    mitm.start()
+                    mitm.join(6) # get the stdout for 6 secs
+                    if mitm.is_alive():pass #check if the mitm process exited
+                    else:sys.exit(0)
+                else:
+                    print 'Targets are not valid IP addresses'
+                    sys.exit(0)
 
-			if options.dumpfile:
-				print 'Writing packets to file %s....\n' % options.dumpfile
-				writer = dpkt.pcap.Writer(open(options.dumpfile, 'wb')) # create Writer and open dump file
-				for ts, pkt in pc:
-					writer.writepkt(pkt) # write packets.
-			elif options.hexdump:
-				for ts, pkt in pc:
-					print '\n', dpkt.hexdump(pkt) # print hex and ASCII
-			else:
-				pc.loop(functs.ethCapDesc) # describe ethernet packets.
-		except KeyboardInterrupt:
-				if options.targets:
-					mitm.join(3)
-					mitm.terminate()
-				if options.dumpfile: writer.close()
-				precv, pdrop, pifdrop = pc.stats()
-				# print statistics
-				print '\n%d packets received by filter' % precv
-        			print '%d packets dropped by kernel' % pdrop				
-				print '%d packets dropped by interface' % pifdrop 
+            print 'Listening on %s:\n' % options.interface
 
-else:		
-	print 'Interface not specified\n'
-	print p.print_help() # print help						
-			
-			
+            if options.dumpfile:
+                print 'Writing packets to file %s....\n' % options.dumpfile
+                writer = dpkt.pcap.Writer(open(options.dumpfile, 'wb')) # create Writer and open dump file
+                for ts, pkt in pc:
+                    writer.writepkt(pkt) # write packets.
+            elif options.hexdump:
+                for ts, pkt in pc:
+                    print '\n', dpkt.hexdump(pkt) # print hex and ASCII
+            else:
+                pc.loop(functs.ethCapDesc) # describe ethernet packets.
+        except KeyboardInterrupt:
+            if options.targets:
+                mitm.join(3)
+                mitm.terminate()
+            if options.dumpfile: writer.close()
+            precv, pdrop, pifdrop = pc.stats()
+            # print statistics
+            print '\n%d packets received by filter' % precv
+            print '%d packets dropped by kernel' % pdrop
+            print '%d packets dropped by interface' % pifdrop
 
-
-
-
-
-		
+else:
+    print 'Interface not specified\n'
+    print p.print_help() # print help
