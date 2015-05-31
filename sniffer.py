@@ -50,7 +50,7 @@ if options.interface:
         try:
             if options.targets: # if -m: run the attack in a separate process
                 target1, target2 = options.targets #get the targets from -m dest tuple
-                if functs.checkIp(target1)==True and functs.checkIp(target2)==True: # check for valid targets (functs.checkIp)
+                if functs.check_ip(target1)==True and functs.check_ip(target2)==True: # check for valid targets (functs.check_ip)
                     mitm=Process(target=attacks.mitm, args=(target1, target2, options.interface))
                     mitm.start()
                     mitm.join(6) # get the stdout for 6 secs
@@ -71,7 +71,7 @@ if options.interface:
                 for ts, pkt in pc:
                     print '\n', dpkt.hexdump(pkt) # print hex and ASCII
             else:
-                pc.loop(functs.ethCapDesc) # describe ethernet packets.
+                pc.loop(functs.eth_cap_desc) # describe ethernet packets.
         except KeyboardInterrupt:
             if options.targets:
                 mitm.join(3)

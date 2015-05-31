@@ -33,17 +33,14 @@ def eth_ntoa(buffer):
     mac = ':'.join(mac_lst)
     return mac
 
-
-
 # convert hex mac to binary
 def eth_aton(buffer):
     sp = buffer.split(':')
     buffer = ''.join(sp)
     return binascii.unhexlify(buffer)
 
-
 # Get IP address from a local interface
-def getDeviceIp(device):
+def get_device_ip(device):
     try:
         return str(netifaces.ifaddresses(device)[netifaces.AF_INET][0]['addr'])
     except KeyError:
@@ -53,19 +50,16 @@ def getDeviceIp(device):
         print 'Error: Device \"',device,'\" does not exist.'
         sys.exit(0)
 
-
 # Get MAC address from a local interface
-def getDeviceMac(device):
+def get_device_mac(device):
     try:
         return str(netifaces.ifaddresses(device)[netifaces.AF_LINK][0]['addr'])
     except ValueError:
         print 'Error: Device \"',device,'\" does not exist.'
         sys.exit(0)
 
-
-
 # Get a remote host's MAC address
-def getMac(ipaddr, device):
+def get_mac(ipaddr, device):
 
     def handler(signum, frame):
         print ipaddr, 'seems to be down'
@@ -74,8 +68,8 @@ def getMac(ipaddr, device):
 
     arp = dpkt.arp.ARP()
 
-    arp.sha = eth_aton(getDeviceMac(device)) # source mac address
-    arp.spa = socket.inet_aton(getDeviceIp(device)) # source ip address
+    arp.sha = eth_aton(get_device_mac(device)) # source mac address
+    arp.spa = socket.inet_aton(get_device_ip(device)) # source ip address
     arp.tha = eth_aton('00:00:00:00:00:00') # destination mac address
     arp.tpa = socket.inet_aton(ipaddr) #destination ip address
     arp.op = dpkt.arp.ARP_OP_REQUEST # ARP message opcode
@@ -107,9 +101,8 @@ def getMac(ipaddr, device):
                 print socket.inet_ntoa(arp_answer.spa), '=>', eth_ntoa(arp_answer.sha)
                 return eth_ntoa(arp_answer.sha)# return the mac address
 
-
 # Print ethernet packets short description (check for datalink type in main prog
-def ethCapDesc(ts, pkt): # to be called with pcap.pcap.loop()
+def eth_cap_desc(ts, pkt): # to be called with pcap.pcap.loop()
     eth = dpkt.ethernet.Ethernet(pkt)
     p1 = eth.data
     if hasattr(p1, 'data'):
@@ -146,11 +139,8 @@ def ethCapDesc(ts, pkt): # to be called with pcap.pcap.loop()
         dha = eth_ntoa(eth.dst)
         print time.strftime('%H:%M:%S',time.localtime(ts)), '%s %s  =>  %s' % (p1.__class__.__name__,sha, dha)
 
-
-
-
 # check if an IP address is valid, returns True for valid, and False for invalid
-def checkIp(addr):
+def check_ip(addr):
     try:
         socket.inet_aton(addr)
         return True
