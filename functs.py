@@ -151,21 +151,8 @@ def ethCapDesc(ts, pkt): # to be called with pcap.pcap.loop()
 
 # check if an IP address is valid, returns True for valid, and False for invalid
 def checkIp(addr):
-    if len(addr.split()) == 1: # check for spaces
-        addr_list = addr.split('.') # split with dot separator
-        if len(addr_list) == 4: # check if length is 4
-            for i,a in enumerate(addr_list): # convert list items to integers (return False if not possible)
-                try:
-                    addr_list[i] = int(a)
-                except:
-                    return False
-                if not addr_list[i] == abs(addr_list[i]): #check for netagive values
-                    return False
-            if max(addr_list) < 256: # check if any list item is greater than 255
-                return True
-            else:
-                return False
-        else:
-            return False
-    else:
+    try:
+        socket.inet_aton(addr)
+        return True
+    except socket.error:
         return False
