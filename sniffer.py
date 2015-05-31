@@ -17,7 +17,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.  #
 ##########################################################################
 
-
 import functs
 import attacks
 from multiprocessing import Process
@@ -32,9 +31,7 @@ p.add_option('-x', '--hexdump', action='store_true', dest='hexdump', default=Fal
 p.add_option('-s', '--snaplen', dest='snaplen', default=65535, type='int', help='Set the capture snapshot length in bytes (default is 65535).')
 p.add_option('-w', '--dumpfile', dest='dumpfile', help='Dump packets in a file (.pcap).')
 p.add_option('-p', '--promisc', action='store_true', dest='promisc', default=False, help='Enable promiscuous mode for the network interface.')
-
 options, arguments = p.parse_args() # get options and arguments
-
 if options.interface:
     try:
         pc = pcap.pcap(name = options.interface, snaplen = options.snaplen, promisc = options.promisc)
